@@ -2,6 +2,8 @@
 
 A flexible Django application with a module system for dynamically installing, upgrading, and uninstalling feature modules.
 
+![Screenshot](screenshots/view_modules.png?raw=true)
+
 ## Features
 
 - **Module Management System**: Install, upgrade, and uninstall modules dynamically
@@ -165,7 +167,7 @@ The product module is an example module that demonstrates the system's capabilit
 Once installed, access the product module at: http://127.0.0.1:8000/products/
 
 ## Use Cases
-![Screenshot](screenshots/confirm_install_module.png?raw=true)
+
 ### Installing a Module
 
 1. Log in as an admin user
@@ -173,11 +175,13 @@ Once installed, access the product module at: http://127.0.0.1:8000/products/
 3. In the list of available modules, find the "Product Management" module
 4. Click the "Install" button
 5. Confirm the installation on the confirmation page
+![Screenshot](screenshots/confirm_install_module.png?raw=true)
 6. The system will:
    - Add the module to INSTALLED_APPS
    - Run necessary migrations
    - Mark the module as installed
 7. Upon success, you'll be redirected to the module list with a success message
+![Screenshot](screenshots/installed_module.png?raw=true)
 
 If you encounter migration errors, try manually running:
 ```bash
@@ -212,19 +216,24 @@ Example of adding a field to the Product model:
 3. Find the installed module you want to remove
 4. Click the "Uninstall" button
 5. Confirm the uninstallation (two confirmation steps for safety)
+![Screenshot](screenshots/confirm_uninstall_module.png?raw=true)
 6. The system will:
    - Remove the module from INSTALLED_APPS
    - Mark the module as uninstalled
    - Unregister module URLs
+![Screenshot](screenshots/uninstalled_module.png?raw=true)
 
 **Note**: Uninstalling does not delete data from the database, it only makes the module inaccessible.
+![Screenshot](screenshots/not_accessable_module.png?raw=true)
 
 ### Managing Products
 
 #### Viewing Products
+![Screenshot](screenshots/product_index.png?raw=true)
 
 1. Navigate to the Products page (http://127.0.0.1:8000/products/)
 2. Click "View Products" to see the product list
+![Screenshot](screenshots/view_products.png?raw=true)
 3. All users can view the product list, but available actions depend on roles
 
 #### Creating a Product
