@@ -165,7 +165,7 @@ The product module is an example module that demonstrates the system's capabilit
 Once installed, access the product module at: http://127.0.0.1:8000/products/
 
 ## Use Cases
-
+![Screenshot](screenshots/confirm_install_module.png?raw=true)
 ### Installing a Module
 
 1. Log in as an admin user
