@@ -1,0 +1,38 @@
+<!-- product_module/templates/product_module/product_form.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>{% if form.instance.pk %}Edit{% else %}Add New{% endif %} Product</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="form-group mb-3">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="text-danger">
+                        {% for error in field.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a href="{% if form.instance.pk %}{% url 'product_detail' form.instance.pk %}{% else %}{% url 'product_list' %}{% endif %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

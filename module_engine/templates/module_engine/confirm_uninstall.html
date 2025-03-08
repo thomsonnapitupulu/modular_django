@@ -1,0 +1,27 @@
+<!-- module_engine/templates/module_engine/confirm_uninstall.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Uninstall Module</h1>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2>{{ module.name }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <p><strong>Warning:</strong> Uninstalling this module will remove all associated data and functionality.</p>
+                <p>Are you sure you want to uninstall this module?</p>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="confirm" value="yes">
+                <button type="submit" class="btn btn-danger">Yes, uninstall</button>
+                <a href="{% url 'module_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

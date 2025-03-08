@@ -1,0 +1,17 @@
+<!-- product_module/templates/product_module/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="jumbotron">
+        <h1>Product Management</h1>
+        <p class="lead">Manage your products, inventory and pricing in one place.</p>
+        <hr class="my-4">
+        <p>View existing products or add new ones to your inventory.</p>
+        <a class="btn btn-primary btn-lg" href="{% url 'product_list' %}" role="button">View Products</a>
+        {% if perms.product_module.add_product %}
+        <a class="btn btn-success btn-lg" href="{% url 'product_create' %}" role="button">Add New Product</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

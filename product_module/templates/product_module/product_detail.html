@@ -1,0 +1,27 @@
+<!-- product_module/templates/product_module/product_detail.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ product.name }}</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Barcode:</strong> {{ product.barcode }}</p>
+            <p><strong>Price:</strong> ${{ product.price }}</p>
+            <p><strong>Stock:</strong> {{ product.stock }}</p>
+            <p><strong>Last Updated:</strong> {{ product.updated_at }}</p>
+            
+            <div class="mt-4">
+                <a href="{% url 'product_list' %}" class="btn btn-secondary">Back to List</a>
+                {% if perms.product_module.change_product %}
+                <a href="{% url 'product_update' product.id %}" class="btn btn-primary">Edit</a>
+                {% endif %}
+                {% if perms.product_module.delete_product %}
+                <a href="{% url 'product_delete' product.id %}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

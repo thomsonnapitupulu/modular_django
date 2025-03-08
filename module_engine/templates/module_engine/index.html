@@ -1,0 +1,53 @@
+<!-- module_engine/templates/module_engine/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Module Manager</h1>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2>Available Modules</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Version</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for module in modules %}
+                    <tr>
+                        <td>{{ module.name }}</td>
+                        <td>{{ module.version }}</td>
+                        <td>
+                            {% if module.installed %}
+                                <span class="badge bg-success">Installed</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Not Installed</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if module.installed %}
+                                <a href="{% url 'upgrade_module' module.id %}" class="btn btn-sm btn-primary">Upgrade</a>
+                                <a href="{% url 'uninstall_module' module.id %}" class="btn btn-sm btn-danger">Uninstall</a>
+                            {% else %}
+                                <a href="{% url 'install_module' module.id %}" class="btn btn-sm btn-success">Install</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No modules available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
