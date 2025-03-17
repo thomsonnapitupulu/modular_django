@@ -58,6 +58,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'modular_django.wsgi.application'
 
+
+# Default to SQLite
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
 # Use PostgreSQL if DATABASE_URL is set
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
@@ -80,13 +89,6 @@ if DATABASE_URL:
         print(f"Error connecting to PostgreSQL: {str(e)}")
         print("Falling back to SQLite")
 
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
