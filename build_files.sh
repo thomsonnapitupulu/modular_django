@@ -4,14 +4,14 @@
 echo "Python location: $(which python3)"
 
 # Install dependencies
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 
 # Make migrations
-python manage.py makemigrations
-python manage.py migrate
+python3 manage.py makemigrations
+python3 manage.py migrate
 
 # Collect static files
-python manage.py collectstatic --noinput
+python3 manage.py collectstatic --noinput
 
 # Optional: Create superuser (you might want to handle this differently)
 # export DJANGO_SUPERUSER_PASSWORD=your_password
