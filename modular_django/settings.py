@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'module_engine',
+    'product_module',
     'whitenoise.runserver_nostatic',
     # Dynamically installed modules will be added here
 ]
@@ -57,18 +58,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'modular_django.wsgi.application'
 
-# Get the DATABASE_URL from environment variable
-db_config = dj_database_url.config(default=os.environ.get('DATABASE_URL'), conn_max_age=600)
-
-# Add SSL settings
-db_config['OPTIONS'] = {'sslmode': 'require'}
+# Use PostgreSQL if DATABASE_URL is set
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
 # Database
 # Use SQLite locally, but PostgreSQL on Vercel
-if 'VERCEL' in os.environ:
-    DATABASES = {
-        'default': db_config
-    }
+if DATABASE_URL:
+    try:
+        # Test the connection
+        import psycopg2
+        psycopg2.connect(DATABASE_URL)
+        
+        # If connection works, use it
+        DATABASES['default'] = dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    except Exception as e:
+        print(f"Error connecting to PostgreSQL: {str(e)}")
+        print("Falling back to SQLite")
+
 else:
     DATABASES = {
         'default': {
