@@ -71,6 +71,7 @@ if DATABASE_URL:
         
         # If connection works, use it
         DATABASES['default'] = dj_database_url.config(
+            engine='django.db.backends.postgresql',
             default=DATABASE_URL,
             conn_max_age=600,
             ssl_require=True,
