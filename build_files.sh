@@ -6,6 +6,9 @@ echo "Python location: $(which python3)"
 # Install dependencies
 python3 -m pip install -r requirements.txt
 
+# Create static directories
+mkdir -p static staticfiles
+
 # Make migrations
 python3 manage.py makemigrations
 python3 manage.py migrate

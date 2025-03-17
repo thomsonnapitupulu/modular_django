@@ -58,26 +58,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'modular_django.wsgi.application'
 
 # Get the DATABASE_URL from environment variable
-DATABASE_URL = os.environ.get('DATABASE_URL')
+db_config = dj_database_url.config(default=os.environ.get('DATABASE_URL'), conn_max_age=600)
+
+# Add SSL settings
+db_config['OPTIONS'] = {'sslmode': 'require'}
 
 # Database
 # Use SQLite locally, but PostgreSQL on Vercel
 if 'VERCEL' in os.environ:
-    if DATABASE_URL:
-        DATABASES = {
-            'default': dj_database_url.config(
-                default=DATABASE_URL,
-                conn_max_age=600
-            )
-        }
-    else:
-        # Fallback to SQLite for local development
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
-        }
+    DATABASES = {
+        'default': db_config
+    }
 else:
     DATABASES = {
         'default': {
