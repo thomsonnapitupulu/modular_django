@@ -8,6 +8,7 @@ from django.conf import settings
 import importlib
 import subprocess
 import sys
+import os
 
 from .models import Module
 
