@@ -27,6 +27,13 @@ INSTALLED_APPS = [
     # Dynamically installed modules will be added here
 ]
 
+# Use database sessions instead of file-based
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# Adjust cookie settings for Vercel
+SESSION_COOKIE_SECURE = True  # Use secure cookies
+CSRF_COOKIE_SECURE = True     # Use secure CSRF cookies
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
