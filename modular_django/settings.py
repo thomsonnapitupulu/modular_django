@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'module_engine',
     'whitenoise.runserver_nostatic',
+    # 'product_module',
     # Dynamically installed modules will be added here
 ]
 
