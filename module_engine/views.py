@@ -56,32 +56,40 @@ def install_module(request, module_id):
             # Run management command to install module
             module_name = module.identifier
             
-            # Update installed apps in settings
-            settings_path = settings.BASE_DIR / 'modular_django' / 'settings.py'
-            with open(settings_path, 'r') as f:
-                content = f.read()
+            # Check if we're in a read-only environment (like Vercel)
+            readonly_env = os.environ.get('VERCEL', False)
             
-            if f"'{module_name}'" not in content and f'"{module_name}"' not in content:
-                # Add to INSTALLED_APPS
-                new_content = content.replace(
-                    'INSTALLED_APPS = [',
-                    f'INSTALLED_APPS = [\n    "{module_name}",'
-                )
+            if not readonly_env:
+                # For traditional deployments - update settings.py file
+                settings_path = settings.BASE_DIR / 'modular_django' / 'settings.py'
+                with open(settings_path, 'r') as f:
+                    content = f.read()
                 
-                with open(settings_path, 'w') as f:
-                    f.write(new_content)
+                if f"'{module_name}'" not in content and f'"{module_name}"' not in content:
+                    # Add to INSTALLED_APPS
+                    new_content = content.replace(
+                        'INSTALLED_APPS = [',
+                        f'INSTALLED_APPS = [\n    "{module_name}",'
+                    )
+                    
+                    with open(settings_path, 'w') as f:
+                        f.write(new_content)
             
             # Run migrations
             subprocess.check_call([
                 sys.executable, 'manage.py', 'migrate', module_name
             ])
             
-            # Update module status
+            # Update module status in database (this works in both environments)
             module.installed = True
             module.active = True
             module.save()
             
             messages.success(request, _(f"Module {module.name} installed successfully."))
+            
+            if readonly_env:
+                messages.info(request, _("You'll need to restart the application for the changes to take effect."))
+                
             return redirect('module_list')
         
         except Exception as e:
@@ -144,24 +152,32 @@ def uninstall_module(request, module_id):
                 # Get the module name
                 module_name = module.identifier
                 
-                # Update installed apps in settings
-                settings_path = settings.BASE_DIR / 'modular_django' / 'settings.py'
-                with open(settings_path, 'r') as f:
-                    content = f.read()
+                # Check if we're in a read-only environment (like Vercel)
+                readonly_env = os.environ.get('VERCEL', False)
                 
-                # Remove from INSTALLED_APPS
-                new_content = content.replace(f'    "{module_name}",\n', '')
-                new_content = new_content.replace(f"    '{module_name}',\n", '')
+                if not readonly_env:
+                    # For traditional deployments - update settings.py file
+                    settings_path = settings.BASE_DIR / 'modular_django' / 'settings.py'
+                    with open(settings_path, 'r') as f:
+                        content = f.read()
+                    
+                    # Remove from INSTALLED_APPS
+                    new_content = content.replace(f'    "{module_name}",\n', '')
+                    new_content = new_content.replace(f"    '{module_name}',\n", '')
+                    
+                    with open(settings_path, 'w') as f:
+                        f.write(new_content)
                 
-                with open(settings_path, 'w') as f:
-                    f.write(new_content)
-                
-                # Update module status
+                # Update module status in database (this works in both environments)
                 module.installed = False
                 module.active = False
                 module.save()
                 
                 messages.success(request, _(f"Module {module.name} uninstalled successfully."))
+                
+                if readonly_env:
+                    messages.info(request, _("You'll need to restart the application for the changes to take effect."))
+                    
                 return redirect('module_list')
             
             except Exception as e:

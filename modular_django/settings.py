@@ -22,10 +22,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'module_engine',
-    'product_module',
     'whitenoise.runserver_nostatic',
     # Dynamically installed modules will be added here
 ]
+
+# Dynamically add installed modules from the database
+try:
+    from modular_django.dynamic_settings import get_installed_modules
+    INSTALLED_MODULES = get_installed_modules()
+    INSTALLED_APPS.extend(INSTALLED_MODULES)
+except (ImportError, ModuleNotFoundError):
+    # During initial setup, this might fail
+    INSTALLED_MODULES = []
 
 # Use database sessions instead of file-based
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
